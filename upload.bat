@@ -1,0 +1,1 @@
+twine upload -u %PYPI_USER% -p %PYPI_PASSWORD% -r pypi dist/*

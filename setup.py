@@ -9,14 +9,20 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-plat_pkg_data = {
-    'win_amd64': ['Win64/*.dll'],
-    'win32': ['Win32/*.dll'],
-    'macosx_10_5_x86_64': ['MacOS/*.dylib'],
-    'manylinux1_x86_64': ['linux_x86_64/*.so.*.*.*'],
-    'linux-armv7l': ['RPi/*.so.*.*.*'],
-}
+# plat_pkg_data = {
+#     'win_amd64': ['Win64/*.dll'],
+#     'win32': ['Win32/*.dll'],
+#     'macosx_10_5_x86_64': ['MacOS/*.dylib'],
+#     'macosx_10_6_x86_64': ['MacOS/*.dylib'],
+#     'macosx_10_9_x86_64': ['MacOS/*.dylib'],
+#     'manylinux1_x86_64': ['linux_x86_64/*.so.*.*.*'],
+#     'linux-armv7l': ['RPi/*.so.*.*.*'],
+# }
 
+plat_pkg_data = {
+    'any': ['Win64/*.dll', 'Win32/*.dll', 'MacOS/*.dylib'],
+
+}
 
 class _bdist_wheels(bdist_wheel):
     def finalize_options(self):
@@ -28,7 +34,7 @@ class _bdist_wheels(bdist_wheel):
 setup(
     cmdclass={'bdist_wheel': _bdist_wheels},
     name='pyglet_ffmpeg2',
-    version='0.1.16',
+    version='0.1.17',
     description='Platform wheels with ffmpeg binaries and ctypes for pyglet',
     long_description=long_description,
     url='https://github.com/pythonarcade/pyglet-ffmpeg',
@@ -39,10 +45,11 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Documentation',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3',
     ],
     keywords='pyglet ffmpeg audio arcade',
     packages=find_packages(exclude=['docs', 'tests']),
+    platforms=['any'],
     install_requires=[
         'pyglet >= 1.4.4',
     ],

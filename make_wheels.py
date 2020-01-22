@@ -5,8 +5,7 @@ import subprocess
 import shutil
 
 platforms = [
-    'win_amd64', 'win32', 'macosx_10_5_x86_64',
-    'manylinux1_x86_64', 'linux-armv7l',
+    'any',
 ]
 
 if __name__ == '__main__':

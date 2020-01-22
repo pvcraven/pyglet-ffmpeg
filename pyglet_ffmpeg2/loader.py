@@ -67,29 +67,32 @@ def _locate_binaries():
 def _ensure_linux_symlinks(bin_folder):
     """Create symlinks to the libav shared binary files.
 
-    On Linux, each so file needs 2 symlinks to work correctly. As it's not possible
+    On Linux, each .so file needs 2 symlinks to work correctly. As it's not possible
     to package symlinks we need to create them manually. This will only run once.
     """
-    links = {
-        'libavcodec.so.58.*': ('libavcodec.so.58', 'libavcodec.so'),
-        'libavformat.so.58.*': ('libavformat.so.58', 'libavformat.so'),
-        'libswresample.so.3.*': ('libswresample.so.3', 'libswresample.so'),
-        'libavfilter.so.7.*': ('libavfilter.so.7', 'libavfilter.so'),
-        'libavutil.so.56.*': ('libavutil.so.56', 'libavutil.so'),
-        'libswscale.so.5.*': ('libswscale.so.5', 'libswscale.so')
-    }
-    for glob_sofile, symlinks in links.items():
-        search_path = os.path.join(bin_folder, glob_sofile)
-        # print(f"AAA: {search_path}")
-        my_glob = glob.glob(search_path)
-        # print(f"BBB: {my_glob}")
-        if my_glob is not None and len(my_glob) > 0:
-            sofile = my_glob[0]
-            for symlink in symlinks:
-                if not os.path.isfile(os.path.join(bin_folder, symlink)):
-                    os.symlink(
-                        os.path.join(bin_folder, sofile),
-                        os.path.join(bin_folder, symlink)
-                    )
-        else:
-            print(f"Unable to find match for ffmpeg sound library at expected location: {search_path}")
+    try:
+        links = {
+            'libavcodec.so.58.*': ('libavcodec.so.58', 'libavcodec.so'),
+            'libavformat.so.58.*': ('libavformat.so.58', 'libavformat.so'),
+            'libswresample.so.3.*': ('libswresample.so.3', 'libswresample.so'),
+            'libavfilter.so.7.*': ('libavfilter.so.7', 'libavfilter.so'),
+            'libavutil.so.56.*': ('libavutil.so.56', 'libavutil.so'),
+            'libswscale.so.5.*': ('libswscale.so.5', 'libswscale.so')
+        }
+        for glob_sofile, symlinks in links.items():
+            search_path = os.path.join(bin_folder, glob_sofile)
+            # print(f"AAA: {search_path}")
+            my_glob = glob.glob(search_path)
+            # print(f"BBB: {my_glob}")
+            if my_glob is not None and len(my_glob) > 0:
+                sofile = my_glob[0]
+                for symlink in symlinks:
+                    if not os.path.isfile(os.path.join(bin_folder, symlink)):
+                        os.symlink(
+                            os.path.join(bin_folder, sofile),
+                            os.path.join(bin_folder, symlink)
+                        )
+            else:
+                print(f"Unable to find match for ffmpeg sound library at expected location: {search_path}")
+    except Exception as e:
+        print("Warning: Unable to create symlinks to ffmpeg libraries.", e)
